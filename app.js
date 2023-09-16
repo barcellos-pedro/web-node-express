@@ -2,16 +2,9 @@ const express = require("express")
 const handlebars = require("express-handlebars")
 
 const app = express()
-const PORT = process.env.PORT || 3000
 const viewEngine = handlebars.create({})
-
-const FORTUNES = [
-  "Conquer your fears or they will conquer you.",
-  "Rivers need springs.",
-  "Do not fear what you don't know.",
-  "You will have a pleasant surprise.",
-  "Whenever possible, keep it simple.",
-]
+const PORT = process.env.PORT || 3000
+const getFortune = require("./lib/fortune")
 
 app.engine("handlebars", viewEngine.engine)
 app.set("view engine", "handlebars")
@@ -21,9 +14,7 @@ app.use(express.static(`${__dirname}/public`))
 app.get("/", (req, res) => res.send("home"))
 
 app.get("/about", (req, res) => {
-  const randomIndex = Math.floor(Math.random() * FORTUNES.length)
-  const fortune = FORTUNES[randomIndex]
-  res.render("about", { fortune })
+  res.render("about", { fortune: getFortune() })
 })
 
 // Not Found Middleware
