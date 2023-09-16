@@ -1,34 +1,28 @@
 const express = require("express")
 const handlebars = require("express-handlebars")
+const handlers = require("./lib/handlers")
 
 const app = express()
 const viewEngine = handlebars.create({})
 const PORT = process.env.PORT || 3000
-const getFortune = require("./lib/fortune")
+
+/** Config */
+app.use(express.static(`${__dirname}/public`))
 
 app.engine("handlebars", viewEngine.engine)
 app.set("view engine", "handlebars")
 
-app.use(express.static(`${__dirname}/public`))
+/** Routes */
+app.get("/", handlers.home)
+app.get("/about", handlers.about)
 
-app.get("/", (req, res) => res.send("home"))
+/** Middlewares */
 
-app.get("/about", (req, res) => {
-  res.render("about", { fortune: getFortune() })
-})
+// Not Found
+app.use(handlers.notFound)
 
-// Not Found Middleware
-app.use((req, res) => {
-  res.status(404)
-  res.render("404")
-})
-
-// Error Middleware
-app.use((err, req, res, next) => {
-  console.error("[Error middleware]\n", err.message, err.stack)
-  res.status(500)
-  res.render("500")
-})
+// Error
+app.use(handlers.error)
 
 app.listen(PORT, () => {
   console.log(`Express started on http://localhost:${PORT}`)
