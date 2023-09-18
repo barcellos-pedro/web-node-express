@@ -5,6 +5,7 @@ const handlers = require("./lib/handlers")
 const app = express()
 const viewEngine = handlebars.create({})
 const PORT = process.env.PORT || 3000
+// const isMainModule = 
 
 /** Config */
 app.use(express.static(`${__dirname}/public`))
@@ -24,7 +25,11 @@ app.use(handlers.notFound)
 // Error
 app.use(handlers.error)
 
-app.listen(PORT, () => {
-  console.log(`Express started on http://localhost:${PORT}`)
-  console.log("Press Ctrl + C to terminate")
-})
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Express started on http://localhost:${PORT}`)
+    console.log("Press Ctrl + C to terminate")
+  })
+} else {
+  module.exports = app
+}
