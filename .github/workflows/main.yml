@@ -1,0 +1,13 @@
+name: Test and Lint
+
+on:
+  push:
+    branches: main
+
+jobs:
+  tests:
+    name: "Test"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm test
