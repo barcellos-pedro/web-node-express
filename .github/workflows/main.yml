@@ -5,9 +5,22 @@ on:
     branches: main
 
 jobs:
-  tests:
-    name: "Test"
+  test:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v3
-      - run: npm test
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: latest
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: Lint
+        run: npm run lint
