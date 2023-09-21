@@ -1,16 +1,19 @@
 const express = require("express")
-const handlebars = require("express-handlebars")
 const handlers = require("./lib/handlers")
+const handlebars = require('./lib/view-engine')
+const weatherData = require("./lib/middleware/weather")
 
 const app = express()
-const viewEngine = handlebars.create({})
 const PORT = process.env.PORT || 3000
 const isMainModule = require.main === module
 
 /** Config */
-app.use(express.static(`${__dirname}/public`))
+app.disable('x-powered-by')
 
-app.engine("handlebars", viewEngine.engine)
+app.use(express.static(`${__dirname}/public`))
+app.use(weatherData)
+
+app.engine("handlebars", handlebars.engine)
 app.set("view engine", "handlebars")
 
 /** Routes */
