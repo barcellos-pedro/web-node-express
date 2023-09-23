@@ -9,13 +9,17 @@ const handlebars = require("./lib/view-engine")
 const multpart = require("./lib/middleware/multpart")
 const weatherData = require("./lib/middleware/weather")
 const visits = require("./lib/middleware/visits")
+const flash = require("./lib/middleware/flash")
 
 const app = express()
 const PORT = process.env.PORT || 3000
 const isMainModule = require.main === module
 
-/** Config */
+/** Config & Middlewares */
 app.disable("x-powered-by")
+
+app.engine("handlebars", handlebars.engine)
+app.set("view engine", "handlebars")
 
 app.use(express.static(`${__dirname}/public`))
 app.use(express.urlencoded({ extended: false }))
@@ -28,11 +32,11 @@ app.use(
     secret: credentials.cookieSecret,
   })
 )
+
+/** Custom Middlewares */
 app.use(weatherData)
 app.use(visits)
-
-app.engine("handlebars", handlebars.engine)
-app.set("view engine", "handlebars")
+app.use(flash)
 
 /** Routes */
 app.get("/", handlers.home)

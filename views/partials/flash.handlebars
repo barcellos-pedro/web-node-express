@@ -1,0 +1,11 @@
+{{#if flash}}
+<div role="alert" class="alert alert-{{flash.type}} alert-dismissible fade show m-2">
+    <strong>{{flash.title}}</strong>
+
+    <div class="d-block my-1">
+        {{{flash.message}}}
+    </div>
+
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close alert"></button>
+</div>
+{{/if}}
