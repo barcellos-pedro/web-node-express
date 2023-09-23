@@ -4,6 +4,7 @@ const handlebars = require("./lib/view-engine")
 const weatherData = require("./lib/middleware/weather")
 const multiparty = require("multiparty")
 const multpart = require("./lib/middleware/multpart")
+const credentials = require('./config')
 
 const app = express()
 const PORT = process.env.PORT || 3000
