@@ -1,10 +1,13 @@
 const express = require("express")
+const multiparty = require("multiparty")
+const cookieParser = require("cookie-parser")
+
+const credentials = require("./config")
 const handlers = require("./lib/handlers")
 const handlebars = require("./lib/view-engine")
-const weatherData = require("./lib/middleware/weather")
-const multiparty = require("multiparty")
 const multpart = require("./lib/middleware/multpart")
-const credentials = require('./config')
+const weatherData = require("./lib/middleware/weather")
+const visits = require("./lib/middleware/visits")
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -16,7 +19,9 @@ app.disable("x-powered-by")
 app.use(express.static(`${__dirname}/public`))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
+app.use(cookieParser(credentials.cookieSecret))
 app.use(weatherData)
+app.use(visits)
 
 app.engine("handlebars", handlebars.engine)
 app.set("view engine", "handlebars")
